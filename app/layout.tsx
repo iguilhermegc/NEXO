@@ -17,10 +17,19 @@ const sans = Geist({
   display: "swap",
 });
 
+const description =
+  "O cliente encosta o celular na mesa, vê o vídeo do prato, chama o garçom e pede a conta. A gente monta e atualiza tudo para você.";
+
 export const metadata: Metadata = {
   title: "NEXO",
-  description:
-    "O cliente encosta o celular na mesa, vê o vídeo do prato, chama o garçom e pede a conta. A gente monta e atualiza tudo para você.",
+  description,
+  openGraph: {
+    title: "NEXO",
+    description,
+    siteName: "nexo.menu",
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
@@ -36,4 +45,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </body>
     </html>
   );
-};
+}

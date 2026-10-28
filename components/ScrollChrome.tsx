@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 
-
 export function Header() {
   const scrolled = useScrollState();
   return (
@@ -26,7 +25,6 @@ export function Header() {
     </header>
   );
 }
-
 
 function useScrollState() {
   const [scrolled, setScrolled] = useState(false);

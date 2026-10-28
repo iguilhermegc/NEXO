@@ -7,7 +7,9 @@ export function Reveal() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let sr: { destroy: () => void } | undefined;
+    let alive = true;
     import("scrollreveal").then(({ default: ScrollReveal }) => {
+      if (!alive) return; // desmontou antes de a lib carregar
       const instance = ScrollReveal();
       // O hero (HeroScrub) não usa .sec, então fica de fora sozinho.
       instance.reveal(".sec > .wrap, .footer > .wrap", {
@@ -22,7 +24,10 @@ export function Reveal() {
       });
       sr = instance;
     });
-    return () => sr?.destroy();
+    return () => {
+      alive = false;
+      sr?.destroy();
+    };
   }, []);
 
   return null;

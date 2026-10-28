@@ -9,6 +9,11 @@ const esc = (s: string) =>
 const field = (data: Record<string, unknown>, key: string, max: number) =>
   typeof data[key] === "string" ? (data[key] as string).trim().slice(0, max) : "";
 
+// Assunto do e-mail é uma linha só: quebras de linha viram espaço.
+const oneLine = (s: string) => s.replace(/[\r\n]+/g, " ");
+
+const SEND_ERROR = "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp.";
+
 export async function POST(req: Request) {
   let data: Record<string, unknown>;
   try {
@@ -47,22 +52,29 @@ export async function POST(req: Request) {
   const html = `${rows.map(([k, v]) => `<p><strong>${k}:</strong> ${esc(v)}</p>`).join("")}
 <p><strong>Mensagem:</strong></p><p style="white-space:pre-wrap">${esc(mensagem)}</p>`;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL || "nexo.menu <onboarding@resend.dev>",
-      to: [to],
-      reply_to: email,
-      subject: `Novo contato pelo site: ${nome}${restaurante ? ` (${restaurante})` : ""}`,
-      text,
-      html,
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: process.env.CONTACT_FROM_EMAIL || "nexo.menu <onboarding@resend.dev>",
+        to: [to],
+        reply_to: email,
+        subject: oneLine(`Novo contato pelo site: ${nome}${restaurante ? ` (${restaurante})` : ""}`),
+        text,
+        html,
+      }),
+      signal: AbortSignal.timeout(10_000), // não deixa a requisição presa se o Resend travar
+    });
+  } catch (err) {
+    console.error("Resend inacessível:", err);
+    return Response.json({ error: SEND_ERROR }, { status: 502 });
+  }
 
   if (!res.ok) {
     console.error("Resend falhou:", res.status, await res.text());
-    return Response.json({ error: "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp." }, { status: 502 });
+    return Response.json({ error: SEND_ERROR }, { status: 502 });
   }
 
   return Response.json({ ok: true });

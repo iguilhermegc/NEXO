@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ChatIcon } from "@/components/icons";
 
 const FAQ = [
   { q: "O cliente precisa baixar algum aplicativo?", a: "Não. A página abre direto no navegador, pelo NFC ou pelo QR Code." },
@@ -10,7 +9,6 @@ const FAQ = [
   { q: "Quem atualiza o cardápio?", a: "A gente. Você manda a mudança pelo WhatsApp e nós atualizamos." },
   { q: "Alguém pode trocar o link da tag?", a: "Não. A tag é gravada com um link da Nexo e travada contra regravação." },
 ];
-
 
 export function FaqSection() {
   const [open, setOpen] = useState(0);
@@ -25,7 +23,6 @@ export function FaqSection() {
           <p className="body muted">O que os donos de restaurante mais perguntam antes de começar.</p>
           <div className="fq-help">
             <p><strong>Ficou alguma dúvida?</strong> A gente responde no mesmo dia.</p>
-            
           </div>
         </div>
 

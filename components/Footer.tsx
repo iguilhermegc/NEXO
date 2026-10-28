@@ -65,8 +65,6 @@ export function Footer() {
           <a className="ftr-a ftr-top-link" href="#topo">Voltar ao topo ↑</a>
         </div>
       </div>
-
-    
     </footer>
   );
 }

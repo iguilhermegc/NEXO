@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Steps } from "@/components/Steps";
 import { Panel } from "@/components/Panel";
 import {
-  BellIcon, BookIcon, ChatIcon, CheckIcon, PanelIcon, PinIcon,
+  BellIcon, BookIcon, CheckIcon, PanelIcon, PinIcon,
   RefreshIcon, TagIcon, VideoIcon,
 } from "@/components/icons";
 
